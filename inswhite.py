@@ -54,7 +54,7 @@ def inswhite(imgPath, outPath, _colour, _padding):
     return
 
 
-def hexType(s, pat=re.compile(r"[a-f0-9A-F]{6}")):
+def hexType(s, pat=re.compile(r"^#?[a-f0-9A-F]{6}$")):
     if not pat.match(s):
         raise argparse.ArgumentTypeError
     return s
@@ -62,7 +62,7 @@ def hexType(s, pat=re.compile(r"[a-f0-9A-F]{6}")):
 def argParser():
     parser = argparse.ArgumentParser()
     parser.add_argument('inPath', nargs="+")
-    parser.add_argument('--colour', '--color', '-c', type=hexType, default='FFFFFF', required=False)
+    parser.add_argument('--colour', '--color', '-c', type=hexType, default='#FFFFFF', required=False)
     parser.add_argument('--out', '-o', required=False)
     parser.add_argument('--padding','-p', default=0, required=False)
 
