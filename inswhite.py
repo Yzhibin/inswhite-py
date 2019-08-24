@@ -2,6 +2,8 @@ import cv2
 import math
 import sys
 import glob
+import re
+import argparse
 
 
 def display(img, name, x_diff, y_diff):
@@ -12,10 +14,20 @@ def display(img, name, x_diff, y_diff):
     cv2.destroyAllWindows()
     return
 
+def parseColorHex(hex):
+    dec = str(int(hex, 16))
+    rgb = re.findall("..", dec)
+    i = 0
+    while i < len(rgb):
+        rgb[i] = int(rgb[i])
+        i += 1
+    if (len(rgb) < 3):
+        rgb.insert(0, 00)
+    return rgb
 
-def inswhite(imgPath, outPath):
-    PADDING = 0
-    COLOR = [255, 255, 255]
+def inswhite(imgPath, outPath, _colour, _padding):
+    padding = _padding
+    colour = parseColorHex(_colour)
 
     img = cv2.imread(imgPath)
 
@@ -28,13 +40,13 @@ def inswhite(imgPath, outPath):
         diff = w - h
         top = math.floor(diff / 2)
         btm = math.ceil(diff / 2)
-        img = cv2.copyMakeBorder(img, top + PADDING, btm + PADDING, PADDING, PADDING, cv2.BORDER_CONSTANT, value=COLOR)
+        img = cv2.copyMakeBorder(img, top + padding, btm + padding, padding, padding, cv2.BORDER_CONSTANT, value=colour)
     # Portrait
     else:
         diff = h - w
         left = math.floor(diff / 2)
         right = math.ceil(diff / 2)
-        img = cv2.copyMakeBorder(img, PADDING, PADDING, left + PADDING, right + PADDING, cv2.BORDER_CONSTANT, value=COLOR)
+        img = cv2.copyMakeBorder(img, padding, padding, left + padding, right + padding, cv2.BORDER_CONSTANT, value=colour)
 
     # Display Image
     # display(img, 'image', -1000, -2000)
@@ -42,19 +54,33 @@ def inswhite(imgPath, outPath):
     return
 
 
-def main(args):
-    if len(args) < 1:
-        print('Provide file path to at least one image.')
-        exit
+def hexType(s, pat=re.compile(r"[a-f0-9A-F]{6}")):
+    if not pat.match(s):
+        raise argparse.ArgumentTypeError
+    return s
 
+def argParser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('inPath', nargs="+")
+    parser.add_argument('--colour', '--color', '-c', type=hexType, default='FFFFFF', required=False)
+    parser.add_argument('--out', '-o', required=False)
+    parser.add_argument('--padding','-p', default=0, required=False)
+
+    args = parser.parse_args()
+    return args
+
+def main():
+    args = argParser()
+    print(args)
+    inPathWildcard = args.inPath
     i = 0
-    while i < len(args):
-        imgPaths = glob.glob(args[i])
+    while i < len(inPathWildcard):
+        imgPaths = glob.glob(inPathWildcard[i])
         for inPath in imgPaths:
             if inPath.lower().endswith(('.png', '.jpg', '.jpeg')):
                 split = inPath.rsplit('.', 1)
                 outPath = split[0] + '-inswhite.' + split[1]
-                inswhite(inPath, outPath)
+                inswhite(inPath, outPath, args.colour, args.padding)
         i += 1
 
-main(sys.argv[1:])
+main()
