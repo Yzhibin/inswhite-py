@@ -11,13 +11,15 @@ So what does **inswhite** do? It simply makes a rectangular photo square, by add
 **OpenCV** is the only external package used here.
 
 ## Usage
-`python inswhite.py [path1] ([path2] [path3] ...)`
+`python inswhite.py  [path1] ([path2] [path3] ...)`
 > path can be either specific or using wildcard. e.g. `path/to/picture.png` and `path/to/album/*` are both acceptable;
-> accept 1 or more paths to target photos
+> accept 1 or more paths, with or w/o wildcard
+> optional flags:
+> ``` 
+> --colour, -c: colour in HEX representation, with or without "#"
+> --padding, -p: width of padding
+> ```
+
 
 ## Pending Features/Changes
-- Takes in a PADDING parameter for adding extra padding, which will create white areas on all 4 sides.
-
-- Takes in colour parameter, to make inswhite not only adding white. 
-
 - Takes in a out_path parameter, to allow user specify the output directory. Currently, processed photos are created within the same dir of the original.
