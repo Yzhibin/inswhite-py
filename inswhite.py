@@ -17,14 +17,10 @@ def display(img, name, x_diff, y_diff):
 def parseColorHex(hex):
     if (hex[0] == "#"):
         hex = hex[1:]
-    dec = str(int(hex, 16))
-    rgb = re.findall("..", dec)
-    i = 0
-    while i < len(rgb):
-        rgb[i] = int(rgb[i])
-        i += 1
-    if (len(rgb) < 3):
-        rgb.insert(0, 00)
+    r = hex[0:2]
+    g = hex[2:4]
+    b = hex[4:6]
+    rgb = [int(r, 16),int(g, 16),int(b, 16)]
     return rgb
 
 def inswhite(imgPath, outPath, _colour, _padding):
