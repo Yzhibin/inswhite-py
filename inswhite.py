@@ -15,6 +15,8 @@ def display(img, name, x_diff, y_diff):
     return
 
 def parseColorHex(hex):
+    if (hex[0] == "#"):
+        hex = hex[1:]
     dec = str(int(hex, 16))
     rgb = re.findall("..", dec)
     i = 0
