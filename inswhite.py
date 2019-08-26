@@ -14,7 +14,7 @@ def display(img, name, x_diff, y_diff):
     cv2.destroyAllWindows()
     return
 
-def parseColorHex(hex):
+def parseColourHex(hex):
     if (hex[0] == "#"):
         hex = hex[1:]
     r = hex[0:2]
@@ -25,7 +25,7 @@ def parseColorHex(hex):
 
 def inswhite(imgPath, outPath, _colour, _padding):
     padding = _padding
-    colour = parseColorHex(_colour)
+    colour = parseColourHex(_colour)
 
     img = cv2.imread(imgPath)
 
