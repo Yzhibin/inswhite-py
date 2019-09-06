@@ -24,7 +24,7 @@ def parseColourHex(hex):
     return rgb
 
 def inswhite(imgPath, outPath, _colour, _padding):
-    padding = _padding
+    padding = int(_padding)
     colour = parseColourHex(_colour)
 
     img = cv2.imread(imgPath)
