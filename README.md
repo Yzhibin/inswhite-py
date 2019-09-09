@@ -14,12 +14,10 @@ So what does **inswhite** do? It simply makes a rectangular photo square, by add
 `python inswhite.py  [path1] ([path2] [path3] ...)`
 > path can be either specific or using wildcard. e.g. `path/to/picture.png` and `path/to/album/*` are both acceptable;
 > accept 1 or more paths, with or w/o wildcard
+
 > optional flags:
 > ``` 
 > --colour, -c: colour in HEX representation, with or without "#"
 > --padding, -p: width of padding
+> --out, -o: output directory
 > ```
-
-
-## Pending Features/Changes
-- Takes in a out_path parameter, to allow user specify the output directory. Currently, processed photos are created within the same dir of the original.
