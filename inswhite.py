@@ -83,7 +83,7 @@ def argParser():
                         default='#FFFFFF',
                         required=False)
     parser.add_argument('--out', '-o', required=False)
-    parser.add_argument('--padding', '-p', default=0, required=False)
+    parser.add_argument('--padding', '-p', default=26, required=False)
 
     args = parser.parse_args()
     return args
@@ -94,7 +94,10 @@ def main():
     inPathWildcard = args.inPath
     i = 0
     while i < len(inPathWildcard):
-        imgPaths = glob.glob(inPathWildcard[i])
+        curr = inPathWildcard[i]
+        if (os.path.isdir(curr)):
+            curr = curr + "/*"
+        imgPaths = glob.glob(curr)
         for inPath in imgPaths:
             if inPath.lower().endswith(('.png', '.jpg', '.jpeg')):
 
