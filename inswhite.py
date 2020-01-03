@@ -26,7 +26,8 @@ def parseColourHex(hex):
     return rgb
 
 
-def inswhite(imgPath, outPath, _colour, _padding):
+def inswhite(imgPath, outPath, _colour, _padding, inszoom, x_portions,
+             y_portions):
     padding = int(_padding)
     colour = parseColourHex(_colour)
 
@@ -61,108 +62,57 @@ def inswhite(imgPath, outPath, _colour, _padding):
                                  cv2.BORDER_CONSTANT,
                                  value=colour)
 
-    # Display Image
-    # display(img, 'image', -1000, -2000)
-    cv2.imwrite(outPath, img)
-    return
-
-def zoomWhite (img, outPath ,colour, padding, position):
-
-    shape = img.shape
-    h = shape[0]
-    w = shape[1]
-
-    # Landscape
-    if (w > h):
-        diff = w - h
-        top = math.floor(diff / 2)
-        btm = math.ceil(diff / 2)
+    # Wide
+    if (x_portions > y_portions):
+        ratio = x_portions / y_portions
+        diff = (ratio - 1) * img.shape[0]
+        left = math.ceil(diff / 2)
+        right = math.floor(diff / 2)
         img = cv2.copyMakeBorder(img,
-                                 top + padding,
-                                 btm + padding,
-                                 padding,
-                                 padding,
-                                 cv2.BORDER_CONSTANT,
-                                 value=colour)
-    # Portrait
-    else:
-        diff = h - w
-        left = math.floor(diff / 2)
-        right = math.ceil(diff / 2)
-        if (position == 'first'):
-            img = cv2.copyMakeBorder(img,
-                                 padding,
-                                 padding,
-                                 left + padding + right + padding,
                                  0,
-                                 cv2.BORDER_CONSTANT,
-                                 value=colour)
-        elif(position == 'last'):
-            img = cv2.copyMakeBorder(img,
-                                 padding,
-                                 padding,
                                  0,
-                                 left + padding + right + padding,
+                                 left,
+                                 right,
                                  cv2.BORDER_CONSTANT,
                                  value=colour)
-        else:
-             img = cv2.copyMakeBorder(img,
-                                 padding,
-                                 padding,
+
+    # Tall
+    elif (x_portions < y_portions):
+        ratio = y_portions / x_portions
+        diff = (ratio - 1) * img.shape[0]
+        top = math.ceil(diff / 2)
+        btm = math.floor(diff / 2)
+        img = cv2.copyMakeBorder(img,
+                                 top,
+                                 btm,
                                  0,
                                  0,
                                  cv2.BORDER_CONSTANT,
                                  value=colour)
-    # Display Image
-    # display(img, 'image', -1000, -2000)
-    cv2.imwrite(outPath, img)
-    return
 
-def inszoom(imgPath, outPath, _colour, _padding):
-    padding = int(_padding)
-    colour = parseColourHex(_colour)
-
-    img = cv2.imread(imgPath)
-
-    shape = img.shape
-    h = shape[0]
-    w = shape[1]
-
-    # Landscape
-    if (w > h):
-        h = h + padding
-        portions = (w // h) + 1
-        sectionWidth = math.ceil(w / portions)
+    if (inszoom):
+        l = math.ceil(img.shape[0] / y_portions)
         i = 0
-        while i < portions:
-            out = outPath.rsplit('/', 1)[0] + '/' + str(i) + '_' + outPath.rsplit('/', 1)[1]
-            position = 'mid'
-            if i == 0:
-                position = 'first'
-            if i == portions - 1:
-                position = 'last'
-            
-            cropped = img[0:h, sectionWidth * i : sectionWidth * (i+1)].copy()
-
-            zoomWhite(cropped, out, colour, padding, position)
+        while i < y_portions:
+            j = 0
+            while j < x_portions:
+                outSplit = outPath.rsplit('/', 1)
+                segmentPath = outSplit[0] + '/' + str(i) + str(
+                    j) + '_' + outSplit[1]
+                segment = img[l * i:l * (i + 1), l * j:l * (j + 1)].copy()
+                print(segmentPath)
+                cv2.imwrite(segmentPath, segment)
+                j += 1
 
             i += 1
 
-
-    # Portrait
     else:
-        diff = h - w
-        left = math.floor(diff / 2)
-        right = math.ceil(diff / 2)
-        img = cv2.copyMakeBorder(img,
-                                 padding,
-                                 padding,
-                                 left + padding,
-                                 right + padding,
-                                 cv2.BORDER_CONSTANT,
-                                 value=colour)
+        cv2.imwrite(outPath, img)
 
+    # Display Image
+    # display(img, 'image', -1000, -2000)
     return
+
 
 def hexType(s, pat=re.compile(r"^#?[a-f0-9A-F]{6}$")):
     if not pat.match(s):
@@ -182,6 +132,8 @@ def argParser():
     parser.add_argument('--out', '-o', required=False)
     parser.add_argument('--padding', '-p', default=26, required=False)
     parser.add_argument('--mode', '-m', default='inswhite', required=False)
+    parser.add_argument('--X', '-X', default=1, required=False)
+    parser.add_argument('--Y', '-Y', default=1, required=False)
 
     args = parser.parse_args()
     return args
@@ -211,10 +163,9 @@ def main():
                     split = inPath.rsplit('/', 1)
                     outPath = split[0] + '/inswhite-' + split[1]
 
-                if (args.mode == 'inswhite'):
-                    inswhite(inPath, outPath, args.colour, args.padding)
-                elif (args.mode == 'inszoom'):
-                    inszoom(inPath, outPath, args.colour, args.padding)
+                inswhite(inPath, outPath, args.colour, args.padding,
+                         args.mode == 'inszoom', int(args.X), int(args.Y))
+
         i += 1
 
 
