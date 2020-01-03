@@ -5,9 +5,12 @@ Therefore, you may notice that many Instagram users, especially professional pho
 
 There are defiantly a lot of apps available in the marketplace for you to do this trick, and also many more. But I'm sure not many of them, if there is any, do not ask for your email and/or social media info. So, as I generally against download a "many-in-one" app for just one feature that I also don't use very often, I wrote a few lines of Python code, probably less than this readme, to do it for me.
 
-So what does **inswhite** do? It simply makes a rectangular photo square, by adding white colour area to *both* sides - top and bottom, or left and right, depends on the orientation. At least this is what it is capable of for now.
+So what does **inswhite** do? It simply makes a rectangular photo to be square, by adding white area to two sides - top and bottom, or left and right, depends on the orientation. At least this is what it was meant to do at first.
 
-## Prerequisites
+# inszoom
+*NEW* feature. Not able to pinch to zoom? Split a photo into multiple pieces to show more details on Instagram. Each small piece is, of course, a square one filled with white space.
+
+## Dependencies
 **OpenCV** is the only external package used here.
 
 ## Usage
@@ -17,7 +20,15 @@ So what does **inswhite** do? It simply makes a rectangular photo square, by add
 
 > optional flags:
 > ``` 
-> --colour, -c: colour in HEX representation, with or without "#"
-> --padding, -p: width of padding
-> --out, -o: output directory
+> --colour, --color, -c: colour in HEX representation, with or without "#"
+>
+> --padding, -p: width of padding, in pixels
+>
+> --out, -o: output directory, default is same as original file
+>
+> --mode -m: "inszoom" or default "inswhite"
+>
+> --X -X: horizontal pieces, or horizontal "ratio" if not used with inszoom mode
+>
+> --Y -Y: vertical pieces, or vertical "ratio" if not used with inszoom mode
 > ```
