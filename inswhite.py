@@ -66,6 +66,103 @@ def inswhite(imgPath, outPath, _colour, _padding):
     cv2.imwrite(outPath, img)
     return
 
+def zoomWhite (img, outPath ,colour, padding, position):
+
+    shape = img.shape
+    h = shape[0]
+    w = shape[1]
+
+    # Landscape
+    if (w > h):
+        diff = w - h
+        top = math.floor(diff / 2)
+        btm = math.ceil(diff / 2)
+        img = cv2.copyMakeBorder(img,
+                                 top + padding,
+                                 btm + padding,
+                                 padding,
+                                 padding,
+                                 cv2.BORDER_CONSTANT,
+                                 value=colour)
+    # Portrait
+    else:
+        diff = h - w
+        left = math.floor(diff / 2)
+        right = math.ceil(diff / 2)
+        if (position == 'first'):
+            img = cv2.copyMakeBorder(img,
+                                 padding,
+                                 padding,
+                                 left + padding + right + padding,
+                                 0,
+                                 cv2.BORDER_CONSTANT,
+                                 value=colour)
+        elif(position == 'last'):
+            img = cv2.copyMakeBorder(img,
+                                 padding,
+                                 padding,
+                                 0,
+                                 left + padding + right + padding,
+                                 cv2.BORDER_CONSTANT,
+                                 value=colour)
+        else:
+             img = cv2.copyMakeBorder(img,
+                                 padding,
+                                 padding,
+                                 0,
+                                 0,
+                                 cv2.BORDER_CONSTANT,
+                                 value=colour)
+    # Display Image
+    # display(img, 'image', -1000, -2000)
+    cv2.imwrite(outPath, img)
+    return
+
+def inszoom(imgPath, outPath, _colour, _padding):
+    padding = int(_padding)
+    colour = parseColourHex(_colour)
+
+    img = cv2.imread(imgPath)
+
+    shape = img.shape
+    h = shape[0]
+    w = shape[1]
+
+    # Landscape
+    if (w > h):
+        h = h + padding
+        portions = (w // h) + 1
+        sectionWidth = math.ceil(w / portions)
+        i = 0
+        while i < portions:
+            out = outPath.rsplit('/', 1)[0] + '/' + str(i) + '_' + outPath.rsplit('/', 1)[1]
+            position = 'mid'
+            if i == 0:
+                position = 'first'
+            if i == portions - 1:
+                position = 'last'
+            
+            cropped = img[0:h, sectionWidth * i : sectionWidth * (i+1)].copy()
+
+            zoomWhite(cropped, out, colour, padding, position)
+
+            i += 1
+
+
+    # Portrait
+    else:
+        diff = h - w
+        left = math.floor(diff / 2)
+        right = math.ceil(diff / 2)
+        img = cv2.copyMakeBorder(img,
+                                 padding,
+                                 padding,
+                                 left + padding,
+                                 right + padding,
+                                 cv2.BORDER_CONSTANT,
+                                 value=colour)
+
+    return
 
 def hexType(s, pat=re.compile(r"^#?[a-f0-9A-F]{6}$")):
     if not pat.match(s):
@@ -84,6 +181,7 @@ def argParser():
                         required=False)
     parser.add_argument('--out', '-o', required=False)
     parser.add_argument('--padding', '-p', default=26, required=False)
+    parser.add_argument('--mode', '-m', default='inswhite', required=False)
 
     args = parser.parse_args()
     return args
@@ -112,7 +210,11 @@ def main():
                 else:
                     split = inPath.rsplit('/', 1)
                     outPath = split[0] + '/inswhite-' + split[1]
-                inswhite(inPath, outPath, args.colour, args.padding)
+
+                if (args.mode == 'inswhite'):
+                    inswhite(inPath, outPath, args.colour, args.padding)
+                elif (args.mode == 'inszoom'):
+                    inszoom(inPath, outPath, args.colour, args.padding)
         i += 1
 
 
