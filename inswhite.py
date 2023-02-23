@@ -1,6 +1,5 @@
 import cv2
 import math
-import sys
 import glob
 import re
 import argparse
@@ -123,12 +122,13 @@ def hexType(s, pat=re.compile(r"^#?[a-f0-9A-F]{6}$")):
 def argParser():
     parser = argparse.ArgumentParser()
     parser.add_argument('inPath', nargs="+")
-    parser.add_argument('--colour',
-                        '--color',
-                        '-c',
-                        type=hexType,
-                        default='#FFFFFF',
-                        required=False)
+    parser.add_argument(
+        '--color',
+        '--colour',
+        '-c',
+        type=hexType,
+        default='#FFFFFF',
+        required=False)
     parser.add_argument('--out', '-o', required=False)
     parser.add_argument('--padding', '-p', default=26, required=False)
     parser.add_argument('--mode', '-m', default='inswhite', required=False)
