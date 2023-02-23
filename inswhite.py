@@ -163,7 +163,7 @@ def main():
                     split = inPath.rsplit('/', 1)
                     outPath = split[0] + '/inswhite-' + split[1]
 
-                inswhite(inPath, outPath, args.colour, args.padding,
+                inswhite(inPath, outPath, args.color, args.padding,
                          args.mode == 'inszoom', int(args.X), int(args.Y))
 
         i += 1
