@@ -19,7 +19,7 @@ Not able to pinch to zoom? Split a photo into multiple pieces to show more detai
 ## Installation
 
 ```
-`> pip install -r requirements.txt
+pip install -r requirements.txt
 
 ```
 
@@ -51,4 +51,5 @@ optional flags:
 ```
 
 When none of the above optional flags is provided, it is assumed to use
+
 ` --mode inswhite --color #FFFFFF --ratio 16`
