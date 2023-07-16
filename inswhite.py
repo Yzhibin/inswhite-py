@@ -25,9 +25,8 @@ def parseColourHex(hex):
     return rgb
 
 
-def inswhite(imgPath, outPath, _colour, _padding, inszoom, x_portions,
+def inswhite(imgPath, outPath, _colour, _ratio, _padding, inszoom, x_portions,
              y_portions):
-    padding = int(_padding)
     colour = parseColourHex(_colour)
 
     img = cv2.imread(imgPath)
@@ -38,6 +37,9 @@ def inswhite(imgPath, outPath, _colour, _padding, inszoom, x_portions,
 
     # Landscape
     if (w > h):
+        if (_padding): padding = int(_padding)
+        else: padding = int(w / int(_ratio))
+
         diff = w - h
         top = math.floor(diff / 2)
         btm = math.ceil(diff / 2)
@@ -50,6 +52,9 @@ def inswhite(imgPath, outPath, _colour, _padding, inszoom, x_portions,
                                  value=colour)
     # Portrait
     else:
+        if (_padding): padding = int(_padding)
+        else: padding = int(h / int(_ratio))
+        
         diff = h - w
         left = math.floor(diff / 2)
         right = math.ceil(diff / 2)
@@ -122,15 +127,15 @@ def hexType(s, pat=re.compile(r"^#?[a-f0-9A-F]{6}$")):
 def argParser():
     parser = argparse.ArgumentParser()
     parser.add_argument('inPath', nargs="+")
-    parser.add_argument(
-        '--color',
-        '--colour',
-        '-c',
-        type=hexType,
-        default='#FFFFFF',
-        required=False)
+    parser.add_argument('--color',
+                        '--colour',
+                        '-c',
+                        type=hexType,
+                        default='#FFFFFF',
+                        required=False)
     parser.add_argument('--out', '-o', required=False)
-    parser.add_argument('--padding', '-p', default=26, required=False)
+    parser.add_argument('--ratio', '-r', default=16, required=False)
+    parser.add_argument('--padding', '-p', required=False)
     parser.add_argument('--mode', '-m', default='inswhite', required=False)
     parser.add_argument('--X', '-X', default=1, required=False)
     parser.add_argument('--Y', '-Y', default=1, required=False)
@@ -163,8 +168,8 @@ def main():
                     split = inPath.rsplit('/', 1)
                     outPath = split[0] + '/inswhite-' + split[1]
 
-                inswhite(inPath, outPath, args.color, args.padding,
-                         args.mode == 'inszoom', int(args.X), int(args.Y))
+                inswhite(inPath, outPath, args.color, args.ratio, args.padding,
+                         args.mode, int(args.X), int(args.Y))
 
         i += 1
 
