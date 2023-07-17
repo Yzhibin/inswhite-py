@@ -1,16 +1,18 @@
 # inswhite
 
-As rectangular shaped photos are far more common than square shaped ones, Instagram allowed users to post rectangular photos without forcing you to crop it, like what it did in its early days. However, on anyone's profile page, all posts are still displayed as 3xN squares, which means the composition of all rectangular photos is ruined.
+Instagram used to force users to crop their photos to a square shape before posting it, but it's not the case anymore. 
 
-Therefore, you may notice that many Instagram users, especially professional photographers, add a white "frame" to their rectangular photos, to make it a square. It not only makes sure the whole photo is kept as is on the profile page display but also make the profile page looks less squeezy or messy.
+Rectangular shaped photos or videos are very common on ins now. However, the display of them on user's profile page is really bad - it basically only shows a centre part of the picture as a preview so that everything is nicely in a square shape.
 
-There are defiantly a lot of apps available in the marketplace for you to do this trick, and also many more. But I'm sure not many of them, if there is any, do not ask for your email and/or social media info. So, as I generally against download a "many-in-one" app for just one feature that I also don't use very often, I wrote a few lines of Python code, probably less than this readme, to do it for me.
+I built this tool simply to pad a rectangular photo to a square shaped one with some colour, most likely white, so that when my profile page is shown, the composition of my photos are not affected. With those white padding, simply looking at one photo also seems better, at least to my aesthetic choice.
 
-So what does **inswhite** do? It simply makes a rectangular photo to be square, by adding white area to two sides - top and bottom, or left and right, depends on the orientation. At least this is what it was meant to do at first.
+I know there are apps that offer this feature, but I found many of them either ask you to purchase or to subscribe, at least to sign up. I'm not saying that there is anything wrong with that, I simply want to write my own tool to help me to do this simple task.
+
+If you find using this is slightly tedious, which is probably very true, some automation and shortcut can help you. I personally use Apple Automator to run it and have added the Automator action as a service for image files on my mac. Hope that helps.
 
 # inszoom
 
-Not able to pinch to zoom? Split a photo into multiple pieces to show more details on Instagram. Each small piece is, of course, a square one filled with white space.
+Not able to pinch to zoom? Split a photo into multiple pieces to show more details on Instagram. Each small piece is, of course, a square one filled with white space. 
 
 ## Dependencies
 
@@ -20,7 +22,6 @@ Not able to pinch to zoom? Split a photo into multiple pieces to show more detai
 
 ```
 pip install -r requirements.txt
-
 ```
 
 ## Usage
