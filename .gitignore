@@ -1,2 +1,6 @@
 .venv
 .vscode
+.DS_Store
+
+# Automators 
+*.app
